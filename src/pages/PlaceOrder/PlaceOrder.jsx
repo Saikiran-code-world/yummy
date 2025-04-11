@@ -1,9 +1,23 @@
 import React, { useContext } from "react";
 import "./PlaceOrder.css";
 import { StoreContext } from "../../context/StoreContext";
+import { useNavigate } from "react-router-dom";
 
 const PlaceOrder = () => {
   const { getTotalCartAmount } = useContext(StoreContext);
+  const navigate = useNavigate();
+  const total = getTotalCartAmount();
+
+  if (total === 0) {
+    return (
+      <div className="empty-cart-message">
+        <h2>Your cart is empty!</h2>
+        <p>Please add some items to proceed with your order.</p>
+        <button onClick={() => navigate("/")}>Back to Menu</button>
+      </div>
+    );
+  }
+
   return (
     <form className="place-order">
       <div className="place-order-left">
@@ -30,19 +44,17 @@ const PlaceOrder = () => {
           <div>
             <div className="cart-total-details">
               <p>SubTotal</p>
-              <p>₹{getTotalCartAmount()}</p>
+              <p>₹{total}</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <p>Delivery Fee</p>
-              <p>₹{getTotalCartAmount() === 0 ? 0 : 2}</p>
+              <p>₹{total === 0 ? 0 : 2}</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <b>Total</b>
-              <b>
-                ₹{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}
-              </b>
+              <b>₹{total === 0 ? 0 : total + 2}</b>
             </div>
           </div>
           <button>PROCEED TO PAYMENT</button>

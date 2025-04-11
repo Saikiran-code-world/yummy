@@ -4,7 +4,24 @@ import { assets } from "../../assets/assets";
 import { StoreContext } from "../../context/StoreContext";
 
 const FoodItem = ({ id, name, price, description, image }) => {
-  const { cartItems, addToCart, removeFromCart } = useContext(StoreContext);
+  const { cartItems, addToCart, removeFromCart, isLoggedIn } = useContext(StoreContext);
+
+  const handleAddToCart = () => {
+    if (!isLoggedIn) {
+      alert("Please login to add items to the cart.");
+      return;
+    }
+    addToCart(id);
+  };
+
+  const handleRemoveFromCart = () => {
+    if (!isLoggedIn) {
+      alert("Please login to modify your cart.");
+      return;
+    }
+    removeFromCart(id);
+  };
+
   return (
     <div className="food-item">
       <div className="food-item-img-container">
@@ -12,20 +29,20 @@ const FoodItem = ({ id, name, price, description, image }) => {
         {!cartItems[id] ? (
           <img
             className="add"
-            onClick={() => addToCart(id)}
+            onClick={handleAddToCart}
             src={assets.add_icon_white}
             alt=""
           />
         ) : (
           <div className="food-item-counter">
             <img
-              onClick={() => removeFromCart(id)}
+              onClick={handleRemoveFromCart}
               src={assets.remove_icon_red}
               alt=""
             />
             <p>{cartItems[id]}</p>
             <img
-              onClick={() => addToCart(id)}
+              onClick={handleAddToCart}
               src={assets.add_icon_green}
               alt=""
             />
